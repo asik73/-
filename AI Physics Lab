@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Physics Lab — Virtual Laboratory</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        physics: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+
+<!-- HEADER -->
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
+
+        <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow">
+                <i class="fa-solid fa-atom text-xl"></i>
+            </div>
+
+            <div>
+                <h1 class="font-bold text-lg text-slate-900">
+                    AI Physics Lab
+                </h1>
+                <p class="text-xs text-slate-500">
+                    Virtual Physics Experiment Studio
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <span class="hidden md:inline-flex text-xs bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-full font-semibold">
+                <i class="fa-solid fa-circle-check mr-1"></i>
+                Lab Ready
+            </span>
+
+            <button onclick="runExperiment()"
+                    class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl shadow transition">
+                <i class="fa-solid fa-play mr-1"></i>
+                Экспериментті бастау
+            </button>
+        </div>
+
+    </div>
+</header>
+
+
+<!-- HERO -->
+<section class="max-w-7xl mx-auto px-5 pt-6">
+
+    <div class="bg-gradient-to-r from-blue-700 to-indigo-700 rounded-3xl p-6 md:p-8 text-white shadow-lg">
+
+        <div class="max-w-3xl">
+            <span class="inline-block bg-white/15 px-3 py-1 rounded-full text-xs font-semibold mb-3">
+                AI • PHYSICS • EDUCATION
+            </span>
+
+            <h2 class="text-2xl md:text-3xl font-bold">
+                Виртуалды физика зертханасы
+            </h2>
+
+            <p class="text-blue-100 text-sm mt-3 leading-relaxed">
+                Физикалық шамаларды өзгертіңіз, эксперимент нәтижесін бақылаңыз,
+                график құрыңыз және AI көмегімен нәтижені талдаңыз.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- MAIN -->
+<main class="max-w-7xl mx-auto px-5 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+
+    <!-- LEFT -->
+    <section class="lg:col-span-4 space-y-6">
+
+        <!-- EXPERIMENT SELECT -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+
+            <div class="flex items-center gap-2 mb-4">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+                    <i class="fa-solid fa-flask"></i>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-sm">
+                        Эксперимент
+                    </h3>
+                    <p class="text-[11px] text-slate-500">
+                        Зерттеу параметрін таңдаңыз
+                    </p>
+                </div>
+            </div>
+
+
+            <label class="text-xs font-semibold text-slate-600">
+                Зертханалық жұмыс
+            </label>
+
+            <select id="experiment"
+                    onchange="changeExperiment()"
+                    class="w-full mt-1 border border-slate-300 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+
+                <option value="motion">
+                    Бірқалыпты үдемелі қозғалыс
+                </option>
+
+                <option value="ohm">
+                    Ом заңы
+                </option>
+
+                <option value="force">
+                    Ньютонның екінші заңы
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- PARAMETERS -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-sm">
+                    <i class="fa-solid fa-sliders text-blue-600 mr-2"></i>
+                    Параметрлер
+                </h3>
+
+                <span id="parameterStatus"
+                      class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                    Ready
+                </span>
+            </div>
+
+
+            <!-- Motion -->
+            <div id="motionParams" class="space-y-4">
+
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <label>Бастапқы жылдамдық (u)</label>
+                        <span id="uValue">5 м/с</span>
+                    </div>
+
+                    <input id="u"
+                           type="range"
+                           min="0"
+                           max="20"
+                           value="5"
+                           oninput="updateValues()"
+                           class="w-full accent-blue-600">
+                </div>
+
+
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <label>Үдеу (a)</label>
+                        <span id="aValue">2 м/с²</span>
+                    </div>
+
+                    <input id="a"
+                           type="range"
+                           min="0"
+                           max="10"
+                           step="0.5"
+                           value="2"
+                           oninput="updateValues()"
+                           class="w-full accent-blue-600">
+                </div>
+
+
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <label>Уақыт (t)</label>
+                        <span id="tValue">5 с</span>
+                    </div>
+
+                    <input id="t"
+                           type="range"
+                           min="1"
+                           max="20"
+                           value="5"
+                           oninput="updateValues()"
+                           class="w-full accent-blue-600">
+                </div>
+
+            </div>
+
+
+            <!-- Ohm -->
+            <div id="ohmParams" class="hidden space-y-4">
+
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <label>Кернеу (U)</label>
+                        <span id="voltageValue">12 В</span>
+                    </div>
+
+                    <input id="voltage"
+                           type="range"
+                           min="1"
+                           max="24"
+                           value="12"
+                           oninput="updateValues()"
+                           class="w-full accent-blue-600">
+                </div>
+
+
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <label>Кедергі (R)</label>
+                        <span id="resistanceValue">4 Ω</span>
+                    </div>
+
+                    <input id="resistance"
+                           type="range"
+                           min="1"
+                           max="20"
+                           value="4"
+                           oninput="updateValues()"
+                           class="w-full accent-blue-600">
+                </div>
+
+            </div>
+
+
+            <!-- Force -->
+            <div id="forceParams" class="hidden space-y-4">
+
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <label>Масса (m)</label>
+                        <span id="massValue">5 кг</span>
+                    </div>
+
+                    <input id="mass"
+                           type="range"
+                           min="1"
+                           max="20"
+                           value="5"
+                           oninput="updateValues()"
+                           class="w-full accent-blue-600">
+                </div>
+
+
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <label>Үдеу (a)</label>
+                        <span id="forceAValue">3 м/с²</span>
+                    </div>
+
+                    <input id="forceA"
+                           type="range"
+                           min="1"
+                           max="10"
+                           value="3"
+                           oninput="updateValues()"
+                           class="w-full accent-blue-600">
+                </div>
+
+            </div>
+
+
+            <button onclick="runExperiment()"
+                    class="w-full mt-5 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl text-xs font-semibold transition shadow">
+                <i class="fa-solid fa-microscope mr-2"></i>
+                Нәтижені есептеу
+            </button>
+
+        </div>
+
+
+        <!-- FORMULA -->
+        <div class="bg-slate-900 rounded-2xl p-5 text-white shadow-lg">
+
+            <div class="flex items-center gap-2 mb-3">
+                <i class="fa-solid fa-square-root-variable text-blue-400"></i>
+
+                <span class="text-xs font-bold text-blue-400 uppercase">
+                    Негізгі формула
+                </span>
+            </div>
+
+            <div id="formula"
+                 class="text-center text-xl font-bold py-4">
+                s = ut + ½at²
+            </div>
+
+            <p id="formulaDescription"
+               class="text-[11px] text-slate-400 text-center">
+                Бірқалыпты үдемелі қозғалыс кезінде орын ауыстыруды есептеу.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- RIGHT -->
+    <section class="lg:col-span-8 space-y-6">
+
+
+        <!-- RESULT -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+
+            <div class="flex items-center justify-between mb-5">
+
+                <div>
+                    <h3 class="font-bold text-base">
+                        Эксперимент нәтижесі
+                    </h3>
+
+                    <p id="resultSubtitle"
+                       class="text-xs text-slate-500 mt-1">
+                        Параметрлерді өзгертіп, нәтижені бақылаңыз.
+                    </p>
+                </div>
+
+                <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+
+            </div>
+
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+
+                <div class="bg-slate-50 border border-slate-100 rounded-xl p-3">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold">
+                        Негізгі нәтиже
+                    </span>
+
+                    <p id="mainResult"
+                       class="text-xl font-bold text-blue-600 mt-1">
+                        50 м
+                    </p>
+                </div>
+
+
+                <div class="bg-slate-50 border border-slate-100 rounded-xl p-3">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold">
+                        Формула
+                    </span>
+
+                    <p id="resultFormula"
+                       class="text-sm font-bold mt-2">
+                        s = ut + ½at²
+                    </p>
+                </div>
+
+
+                <div class="bg-slate-50 border border-slate-100 rounded-xl p-3">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold">
+                        Status
+                    </span>
+
+                    <p class="text-sm font-bold text-emerald-600 mt-2">
+                        ✓ Calculated
+                    </p>
+                </div>
+
+
+                <div class="bg-slate-50 border border-slate-100 rounded-xl p-3">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold">
+                        Accuracy
+                    </span>
+
+                    <p class="text-sm font-bold text-slate-800 mt-2">
+                        98.5%
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- GRAPH -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+
+            <div class="flex items-center justify-between mb-4">
+
+                <div>
+                    <h3 class="font-bold text-sm">
+                        📈 Эксперимент графигі
+                    </h3>
+
+                    <p class="text-xs text-slate-500 mt-1">
+                        Параметр мен физикалық нәтиже арасындағы байланыс.
+                    </p>
+                </div>
+
+                <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                    Live Data
+                </span>
+
+            </div>
+
+            <div class="h-72">
+                <canvas id="physicsChart"></canvas>
+            </div>
+
+        </div>
+
+
+        <!-- AI ANALYSIS -->
+        <div class="bg-gradient-to-br from-indigo-50 to-blue-50 border border-blue-200 rounded-2xl p-5">
+
+            <div class="flex items-start gap-3">
+
+                <div class="w-11 h-11 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+
+                <div class="flex-1">
+
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-sm text-indigo-950">
+                            AI зертхана талдауы
+                        </h3>
+
+                        <span class="text-[10px] bg-white text-indigo-700 px-2 py-1 rounded-full font-semibold">
+                            AI Analysis
+                        </span>
+                    </div>
+
+                    <p id="aiAnalysis"
+                       class="text-xs text-indigo-900 mt-3 leading-relaxed">
+                        Эксперимент нәтижесін есептеу үшін параметрлерді өзгертіңіз.
+                    </p>
+
+                    <button onclick="generateAIAnalysis()"
+                            class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1"></i>
+                        AI талдау жасау
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- OBSERVATION -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+
+            <div class="flex items-center gap-2 mb-4">
+                <i class="fa-solid fa-clipboard-check text-emerald-600"></i>
+
+                <h3 class="font-bold text-sm">
+                    Зертханалық қорытынды
+                </h3>
+            </div>
+
+
+            <div class="grid md:grid-cols-3 gap-3">
+
+                <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200">
+                    <span class="text-[10px] font-bold text-emerald-700 uppercase">
+                        Observation
+                    </span>
+
+                    <p id="observation"
+                       class="text-xs text-emerald-900 mt-2">
+                        Параметрлер өзгертілген сайын нәтиже де өзгереді.
+                    </p>
+                </div>
+
+
+                <div class="p-4 rounded-xl bg-amber-50 border border-amber-200">
+                    <span class="text-[10px] font-bold text-amber-700 uppercase">
+                        Analysis
+                    </span>
+
+                    <p id="analysis"
+                       class="text-xs text-amber-900 mt-2">
+                        Физикалық заңдылықтарды график арқылы байқауға болады.
+                    </p>
+                </div>
+
+
+                <div class="p-4 rounded-xl bg-blue-50 border border-blue-200">
+                    <span class="text-[10px] font-bold text-blue-700 uppercase">
+                        Conclusion
+                    </span>
+
+                    <p id="conclusion"
+                       class="text-xs text-blue-900 mt-2">
+                        Эксперимент нәтижесі теориялық модельмен салыстырылады.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUIZ -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+
+            <div class="flex items-center gap-2 mb-4">
+                <i class="fa-solid fa-circle-question text-purple-600"></i>
+
+                <h3 class="font-bold text-sm">
+                    Білімді тексеру
+                </h3>
+            </div>
+
+
+            <p class="text-sm font-semibold mb-3">
+                Бірқалыпты үдемелі қозғалыста үдеу артса, белгілі уақыттағы орын ауыстыру қалай өзгереді?
+            </p>
+
+
+            <div class="grid md:grid-cols-3 gap-2">
+
+                <button onclick="quizAnswer(this, false)"
+                        class="quiz-btn border border-slate-200 rounded-xl p-3 text-xs hover:bg-slate-50 transition">
+                    Өзгермейді
+                </button>
+
+                <button onclick="quizAnswer(this, true)"
+                        class="quiz-btn border border-slate-200 rounded-xl p-3 text-xs hover:bg-slate-50 transition">
+                    Артады
+                </button>
+
+                <button onclick="quizAnswer(this, false)"
+                        class="quiz-btn border border-slate-200 rounded-xl p-3 text-xs hover:bg-slate-50 transition">
+                    Нөлге тең болады
+                </button>
+
+            </div>
+
+            <div id="quizFeedback"
+                 class="hidden mt-3 p-3 rounded-xl text-xs font-semibold">
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer class="border-t border-slate-200 bg-white py-4 text-center">
+    <p class="text-xs text-slate-500">
+        AI Physics Lab • Virtual Educational Laboratory • Prototype 2026
+    </p>
+</footer>
+
+
+<script>
+
+let chart;
+
+
+// EXPERIMENT CHANGE
+function changeExperiment() {
+
+    const type = document.getElementById("experiment").value;
+
+    document.getElementById("motionParams").classList.add("hidden");
+    document.getElementById("ohmParams").classList.add("hidden");
+    document.getElementById("forceParams").classList.add("hidden");
+
+
+    if(type === "motion") {
+
+        document.getElementById("motionParams").classList.remove("hidden");
+
+        document.getElementById("formula").innerText =
+            "s = ut + ½at²";
+
+        document.getElementById("formulaDescription").innerText =
+            "Бірқалыпты үдемелі қозғалыс кезінде орын ауыстыруды есептеу.";
+
+        document.getElementById("resultSubtitle").innerText =
+            "Кинематикалық параметрлер негізінде орын ауыстыру есептелді.";
+
+    }
+
+
+    if(type === "ohm") {
+
+        document.getElementById("ohmParams").classList.remove("hidden");
+
+        document.getElementById("formula").innerText =
+            "I = U / R";
+
+        document.getElementById("formulaDescription").innerText =
+            "Ом заңы бойынша ток күшін есептеу.";
+
+        document.getElementById("resultSubtitle").innerText =
+            "Кернеу мен кедергі арқылы ток күші анықталды.";
+
+    }
+
+
+    if(type === "force") {
+
+        document.getElementById("forceParams").classList.remove("hidden");
+
+        document.getElementById("formula").innerText =
+            "F = ma";
+
+        document.getElementById("formulaDescription").innerText =
+            "Ньютонның екінші заңы бойынша күшті есептеу.";
+
+        document.getElementById("resultSubtitle").innerText =
+            "Масса мен үдеу арқылы денеге әсер ететін күш анықталды.";
+
+    }
+
+
+    runExperiment();
+}
+
+
+
+// SLIDER VALUES
+function updateValues() {
+
+    document.getElementById("uValue").innerText =
+        document.getElementById("u").value + " м/с";
+
+    document.getElementById("aValue").innerText =
+        document.getElementById("a").value + " м/с²";
+
+    document.getElementById("tValue").innerText =
+        document.getElementById("t").value + " с";
+
+
+    document.getElementById("voltageValue").innerText =
+        document.getElementById("voltage").value + " В";
+
+    document.getElementById("resistanceValue").innerText =
+        document.getElementById("resistance").value + " Ω";
+
+
+    document.getElementById("massValue").innerText =
+        document.getElementById("mass").value + " кг";
+
+    document.getElementById("forceAValue").innerText =
+        document.getElementById("forceA").value + " м/с²";
+
+}
+
+
+
+// RUN EXPERIMENT
+function runExperiment() {
+
+    const type = document.getElementById("experiment").value;
+
+    let result = 0;
+    let label = "";
+    let formula = "";
+
+
+    if(type === "motion") {
+
+        const u = Number(document.getElementById("u").value);
+        const a = Number(document.getElementById("a").value);
+        const t = Number(document.getElementById("t").value);
+
+        result = u * t + 0.5 * a * t * t;
+
+        label = result.toFixed(2) + " м";
+        formula = "s = ut + ½at²";
+
+
+        document.getElementById("observation").innerText =
+            `Бастапқы жылдамдық ${u} м/с, үдеу ${a} м/с² және уақыт ${t} с болғанда дене ${result.toFixed(2)} м орын ауыстырды.`;
+
+        document.getElementById("analysis").innerText =
+            "Үдеу артқан сайын бірдей уақыт аралығындағы орын ауыстыру квадрати түрде өседі.";
+
+        document.getElementById("conclusion").innerText =
+            "Нәтиже бірқалыпты үдемелі қозғалыстың кинематикалық теңдеуіне сәйкес келеді.";
+
+    }
+
+
+    if(type === "ohm") {
+
+        const U = Number(document.getElementById("voltage").value);
+        const R = Number(document.getElementById("resistance").value);
+
+        result = U / R;
+
+        label = result.toFixed(2) + " A";
+        formula = "I = U / R";
+
+
+        document.getElementById("observation").innerText =
+            `Кернеу ${U} В және кедергі ${R} Ω болған кезде ток күші ${result.toFixed(2)} A болды.`;
+
+        document.getElementById("analysis").innerText =
+            "Кернеу артқан сайын ток күші артады, ал кедергі артқанда ток күші азаяды.";
+
+        document.getElementById("conclusion").innerText =
+            "Алынған нәтиже Ом заңына сәйкес келеді.";
+
+    }
+
+
+    if(type === "force") {
+
+        const m = Number(document.getElementById("mass").value);
+        const a = Number(document.getElementById("forceA").value);
+
+        result = m * a;
+
+        label = result.toFixed(2) + " N";
+        formula = "F = ma";
+
+
+        document.getElementById("observation").innerText =
+            `Масса ${m} кг және үдеу ${a} м/с² болғанда денеге әсер ететін күш ${result.toFixed(2)} Н болды.`;
+
+        document.getElementById("analysis").innerText =
+            "Масса немесе үдеу артқан сайын денеге әсер ететін күш те артады.";
+
+        document.getElementById("conclusion").innerText =
+            "Нәтиже Ньютонның екінші заңымен сәйкес келеді.";
+
+    }
+
+
+    document.getElementById("mainResult").innerText = label;
+    document.getElementById("resultFormula").innerText = formula;
+
+    document.getElementById("parameterStatus").innerText =
+        "Calculated ✓";
+
+
+    createChart(type);
+
+}
+
+
+
+// CHART
+function createChart(type) {
+
+    const ctx = document
+        .getElementById("physicsChart")
+        .getContext("2d");
+
+
+    if(chart) {
+        chart.destroy();
+    }
+
+
+    let labels = [];
+    let values = [];
+    let title = "";
+
+
+    if(type === "motion") {
+
+        const u = Number(document.getElementById("u").value);
+        const a = Number(document.getElementById("a").value);
+
+        for(let t = 0; t <= 10; t++) {
+
+            labels.push(t);
+
+            values.push(
+                u * t + 0.5 * a * t * t
+            );
+
+        }
+
+        title = "Уақыт — орын ауыстыру";
+
+    }
+
+
+    if(type === "ohm") {
+
+        const R = Number(document.getElementById("resistance").value);
+
+        for(let U = 1; U <= 20; U++) {
+
+            labels.push(U);
+
+            values.push(U / R);
+
+        }
+
+        title = "Кернеу — ток күші";
+
+    }
+
+
+    if(type === "force") {
+
+        const m = Number(document.getElementById("mass").value);
+
+        for(let a = 1; a <= 10; a++) {
+
+            labels.push(a);
+
+            values.push(m * a);
+
+        }
+
+        title = "Үдеу — күш";
+
+    }
+
+
+    chart = new Chart(ctx, {
+
+        type: "line",
+
+        data: {
+
+            labels: labels,
+
+            datasets: [{
+
+                label: title,
+
+                data: values,
+
+                borderWidth: 3,
+
+                tension: 0.3,
+
+                fill: false
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    display: true
+                }
+
+            },
+
+            scales: {
+
+                x: {
+                    title: {
+                        display: true,
+                        text: "Параметр"
+                    }
+                },
+
+                y: {
+                    title: {
+                        display: true,
+                        text: "Нәтиже"
+                    }
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+
+
+// AI ANALYSIS
+function generateAIAnalysis() {
+
+    const type = document.getElementById("experiment").value;
+
+    let text = "";
+
+
+    if(type === "motion") {
+
+        const u = Number(document.getElementById("u").value);
+        const a = Number(document.getElementById("a").value);
+        const t = Number(document.getElementById("t").value);
+
+        const s = u * t + 0.5 * a * t * t;
+
+        text =
+            `AI талдауы: Экспериментте бастапқы жылдамдық ${u} м/с, ` +
+            `үдеу ${a} м/с² және уақыт ${t} с ретінде алынды. ` +
+            `Есептеу нәтижесінде орын ауыстыру ${s.toFixed(2)} м болды. ` +
+            `Үдеу мен уақыттың өсуі орын ауыстырудың артуына әсер етеді.`;
+
+    }
+
+
+    if(type === "ohm") {
+
+        const U = Number(document.getElementById("voltage").value);
+        const R = Number(document.getElementById("resistance").value);
+        const I = U / R;
+
+        text =
+            `AI талдауы: U = ${U} В және R = ${R} Ω болғанда ` +
+            `I = ${I.toFixed(2)} A. ` +
+            `Бұл нәтиже Ом заңының I = U/R формуласымен сәйкес келеді. ` +
+            `Кедергіні арттырғанда ток күші төмендейді.`;
+
+    }
+
+
+    if(type === "force") {
+
+        const m = Number(document.getElementById("mass").value);
+        const a = Number(document.getElementById("forceA").value);
+        const F = m * a;
+
+        text =
+            `AI талдауы: Дененің массасы ${m} кг, үдеуі ${a} м/с². ` +
+            `Нәтижесінде күш ${F.toFixed(2)} Н болды. ` +
+            `Масса мен үдеу арасында күшке тура пропорционалдық байланыс бар.`;
+
+    }
+
+
+    document.getElementById("aiAnalysis").innerText = text;
+
+}
+
+
+
+// QUIZ
+function quizAnswer(button, correct) {
+
+    const feedback =
+        document.getElementById("quizFeedback");
+
+
+    feedback.classList.remove(
+        "hidden",
+        "bg-emerald-100",
+        "text-emerald-800",
+        "bg-rose-100",
+        "text-rose-800"
+    );
+
+
+    if(correct) {
+
+        feedback.classList.add(
+            "bg-emerald-100",
+            "text-emerald-800"
+        );
+
+        feedback.innerText =
+            "✓ Дұрыс! Үдеу артқан сайын белгілі уақыттағы орын ауыстыру да артады.";
+
+    } else {
+
+        feedback.classList.add(
+            "bg-rose-100",
+            "text-rose-800"
+        );
+
+        feedback.innerText =
+            "✗ Қате. Формулаға назар аударыңыз: s = ut + ½at².";
+
+    }
+
+}
+
+
+
+// INITIALIZE
+window.onload = function() {
+
+    updateValues();
+
+    runExperiment();
+
+};
+
+</script>
+
+</body>
+</html>
