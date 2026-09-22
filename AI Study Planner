@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Study Planner</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        study: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            900: '#4c1d95'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+
+<!-- HEADER -->
+
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+
+    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
+
+        <div class="flex items-center gap-3">
+
+            <div class="w-11 h-11 rounded-xl bg-violet-600 text-white flex items-center justify-center shadow">
+                <i class="fa-solid fa-brain text-xl"></i>
+            </div>
+
+            <div>
+                <h1 class="font-bold text-lg text-slate-900">
+                    AI Study Planner
+                </h1>
+
+                <p class="text-xs text-slate-500">
+                    Intelligent Student Productivity System
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="flex items-center gap-2">
+
+            <span class="hidden md:inline-flex bg-emerald-100 text-emerald-700
+                         px-3 py-1.5 rounded-full text-xs font-semibold">
+
+                <i class="fa-solid fa-circle-check mr-1"></i>
+                System Ready
+
+            </span>
+
+            <button onclick="generatePlan()"
+                    class="bg-violet-600 hover:bg-violet-700 text-white
+                           px-4 py-2 rounded-xl text-xs font-semibold shadow">
+
+                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i>
+
+                AI жоспар құру
+
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="max-w-7xl mx-auto px-5 pt-6">
+
+    <div class="rounded-3xl p-7 md:p-9
+                bg-gradient-to-r from-violet-700 to-indigo-700
+                text-white shadow-lg">
+
+        <span class="inline-block bg-white/15 px-3 py-1 rounded-full
+                     text-xs font-semibold mb-3">
+
+            AI • EDUCATION • PRODUCTIVITY
+
+        </span>
+
+        <h2 class="text-2xl md:text-3xl font-bold">
+            Оқуыңды AI көмегімен басқар
+        </h2>
+
+        <p class="text-violet-100 text-sm mt-3 max-w-2xl leading-relaxed">
+
+            Пәндеріңді, тапсырмаларыңды және дедлайндарыңды енгіз.
+            Жүйе оқу жүктемесін талдап, басымдықтарды анықтап,
+            жеке оқу жоспарын ұсынады.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- MAIN -->
+
+<main class="max-w-7xl mx-auto px-5 py-6
+             grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+
+    <!-- LEFT -->
+
+    <section class="lg:col-span-4 space-y-6">
+
+
+        <!-- ADD TASK -->
+
+        <div class="bg-white rounded-2xl border border-slate-200
+                    shadow-sm p-5">
+
+            <div class="flex items-center gap-3 mb-5">
+
+                <div class="w-9 h-9 rounded-xl bg-violet-100
+                            text-violet-600 flex items-center justify-center">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                </div>
+
+                <div>
+
+                    <h3 class="font-bold text-sm">
+                        Тапсырма қосу
+                    </h3>
+
+                    <p class="text-[11px] text-slate-500">
+                        Оқу тапсырмасын енгізіңіз
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="space-y-3">
+
+                <div>
+
+                    <label class="text-xs font-semibold text-slate-600">
+                        Пән
+                    </label>
+
+                    <select id="subject"
+                            class="w-full mt-1 border border-slate-300
+                                   rounded-xl px-3 py-2 text-sm outline-none">
+
+                        <option>Математика</option>
+                        <option>Физика</option>
+                        <option>Информатика</option>
+                        <option>Педагогика</option>
+                        <option>Ағылшын тілі</option>
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label class="text-xs font-semibold text-slate-600">
+                        Тапсырма
+                    </label>
+
+                    <input id="task"
+                           type="text"
+                           placeholder="Мысалы: Электростатика есептері"
+                           class="w-full mt-1 border border-slate-300
+                                  rounded-xl px-3 py-2 text-sm outline-none
+                                  focus:ring-2 focus:ring-violet-500">
+
+                </div>
+
+
+                <div class="grid grid-cols-2 gap-3">
+
+                    <div>
+
+                        <label class="text-xs font-semibold text-slate-600">
+                            Дедлайн
+                        </label>
+
+                        <input id="deadline"
+                               type="date"
+                               class="w-full mt-1 border border-slate-300
+                                      rounded-xl px-3 py-2 text-sm">
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="text-xs font-semibold text-slate-600">
+                            Уақыт
+                        </label>
+
+                        <select id="hours"
+                                class="w-full mt-1 border border-slate-300
+                                       rounded-xl px-3 py-2 text-sm">
+
+                            <option value="1">1 сағат</option>
+                            <option value="2">2 сағат</option>
+                            <option value="3">3 сағат</option>
+                            <option value="4">4 сағат</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <label class="text-xs font-semibold text-slate-600">
+                        Приоритет
+                    </label>
+
+                    <select id="priority"
+                            class="w-full mt-1 border border-slate-300
+                                   rounded-xl px-3 py-2 text-sm">
+
+                        <option value="high">
+                            🔴 Жоғары
+                        </option>
+
+                        <option value="medium" selected>
+                            🟡 Орташа
+                        </option>
+
+                        <option value="low">
+                            🟢 Төмен
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button onclick="addTask()"
+                        class="w-full bg-violet-600 hover:bg-violet-700
+                               text-white py-2.5 rounded-xl text-xs
+                               font-semibold transition">
+
+                    <i class="fa-solid fa-plus mr-2"></i>
+                    Тапсырма қосу
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- GPA CALCULATOR -->
+
+        <div class="bg-slate-900 rounded-2xl p-5 text-white shadow-lg">
+
+            <div class="flex items-center gap-2 mb-4">
+
+                <i class="fa-solid fa-graduation-cap text-violet-400"></i>
+
+                <span class="text-xs font-bold text-violet-400 uppercase">
+                    GPA Calculator
+                </span>
+
+            </div>
+
+
+            <div class="grid grid-cols-2 gap-3">
+
+                <div>
+
+                    <label class="text-[10px] text-slate-400">
+                        Current GPA
+                    </label>
+
+                    <input id="currentGpa"
+                           type="number"
+                           value="3.20"
+                           step="0.01"
+                           min="0"
+                           max="4"
+                           class="w-full mt-1 bg-slate-800
+                                  border border-slate-700 rounded-lg
+                                  px-2 py-2 text-sm">
+
+                </div>
+
+
+                <div>
+
+                    <label class="text-[10px] text-slate-400">
+                        Target GPA
+                    </label>
+
+                    <input id="targetGpa"
+                           type="number"
+                           value="3.50"
+                           step="0.01"
+                           min="0"
+                           max="4"
+                           class="w-full mt-1 bg-slate-800
+                                  border border-slate-700 rounded-lg
+                                  px-2 py-2 text-sm">
+
+                </div>
+
+            </div>
+
+
+            <button onclick="calculateGPA()"
+                    class="w-full mt-4 bg-violet-600
+                           hover:bg-violet-700 py-2 rounded-xl
+                           text-xs font-semibold">
+
+                GPA талдау
+
+            </button>
+
+
+            <div id="gpaResult"
+                 class="mt-4 text-center text-sm text-slate-300">
+
+                GPA мақсатыңызды енгізіңіз.
+
+            </div>
+
+        </div>
+
+
+        <!-- AI STATUS -->
+
+        <div class="bg-white border border-slate-200 rounded-2xl
+                    p-5 shadow-sm">
+
+            <div class="flex justify-between items-center mb-4">
+
+                <h3 class="font-bold text-sm">
+                    <i class="fa-solid fa-chart-pie text-violet-600 mr-2"></i>
+                    Study Statistics
+                </h3>
+
+                <span class="text-[10px] bg-violet-100
+                             text-violet-700 px-2 py-1 rounded-full">
+
+                    Live
+
+                </span>
+
+            </div>
+
+
+            <div class="space-y-3">
+
+                <div>
+
+                    <div class="flex justify-between text-xs mb-1">
+
+                        <span>Оқу прогресі</span>
+
+                        <span id="progressText">
+                            0%
+                        </span>
+
+                    </div>
+
+                    <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+
+                        <div id="progressBar"
+                             class="h-full bg-violet-600 rounded-full"
+                             style="width:0%">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="grid grid-cols-2 gap-3 mt-4">
+
+                    <div class="bg-slate-50 rounded-xl p-3 text-center">
+
+                        <span class="text-[10px] text-slate-400">
+                            Тапсырма
+                        </span>
+
+                        <p id="taskCount"
+                           class="text-xl font-bold text-violet-600">
+                            0
+                        </p>
+
+                    </div>
+
+
+                    <div class="bg-slate-50 rounded-xl p-3 text-center">
+
+                        <span class="text-[10px] text-slate-400">
+                            Сағат
+                        </span>
+
+                        <p id="totalHours"
+                           class="text-xl font-bold text-slate-800">
+                            0
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- RIGHT -->
+
+    <section class="lg:col-span-8 space-y-6">
+
+
+        <!-- TODAY PLAN -->
+
+        <div class="bg-white rounded-2xl border border-slate-200
+                    shadow-sm p-5">
+
+            <div class="flex items-center justify-between mb-5">
+
+                <div>
+
+                    <h3 class="font-bold text-base">
+                        📅 Бүгінгі оқу жоспары
+                    </h3>
+
+                    <p class="text-xs text-slate-500 mt-1">
+                        AI арқылы басымдық бойынша реттелген тапсырмалар
+                    </p>
+
+                </div>
+
+
+                <span class="bg-violet-100 text-violet-700
+                             px-3 py-1.5 rounded-full text-[10px]
+                             font-semibold">
+
+                    AI PRIORITIZED
+
+                </span>
+
+            </div>
+
+
+            <div id="taskList"
+                 class="space-y-3">
+
+                <div class="text-center py-10 text-slate-400">
+
+                    <i class="fa-solid fa-clipboard-list text-3xl mb-3"></i>
+
+                    <p class="text-xs">
+                        Әзірге тапсырмалар жоқ
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- AI RECOMMENDATION -->
+
+        <div class="bg-gradient-to-br from-violet-50
+                    to-indigo-50 border border-violet-200
+                    rounded-2xl p-5">
+
+            <div class="flex gap-3">
+
+                <div class="w-11 h-11 bg-violet-600 text-white
+                            rounded-xl flex items-center justify-center">
+
+                    <i class="fa-solid fa-robot"></i>
+
+                </div>
+
+
+                <div class="flex-1">
+
+                    <div class="flex items-center justify-between">
+
+                        <h3 class="font-bold text-sm text-violet-950">
+                            AI Study Assistant
+                        </h3>
+
+                        <span class="text-[10px] bg-white
+                                     text-violet-700 px-2 py-1
+                                     rounded-full font-semibold">
+
+                            SMART ADVICE
+
+                        </span>
+
+                    </div>
+
+
+                    <p id="aiAdvice"
+                       class="text-xs text-violet-900 mt-3 leading-relaxed">
+
+                        Тапсырмаларды қосқаннан кейін AI сіздің
+                        оқу жүктемеңізге сәйкес ұсыныс береді.
+
+                    </p>
+
+
+                    <button onclick="generatePlan()"
+                            class="mt-4 bg-violet-600
+                                   hover:bg-violet-700 text-white
+                                   text-xs font-semibold px-4 py-2
+                                   rounded-xl">
+
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1"></i>
+
+                        Жоспарды талдау
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- WEEKLY PROGRESS -->
+
+        <div class="bg-white rounded-2xl border border-slate-200
+                    shadow-sm p-5">
+
+            <div class="flex items-center justify-between mb-5">
+
+                <div>
+
+                    <h3 class="font-bold text-sm">
+                        📊 Апталық прогресс
+                    </h3>
+
+                    <p class="text-xs text-slate-500 mt-1">
+                        Оқу белсенділігінің статистикасы
+                    </p>
+
+                </div>
+
+                <i class="fa-solid fa-chart-column text-violet-600"></i>
+
+            </div>
+
+
+            <div class="grid grid-cols-7 gap-2 items-end h-48">
+
+                <div class="text-center">
+                    <div class="h-20 bg-violet-200 rounded-t-lg"></div>
+                    <p class="text-[10px] mt-2 text-slate-500">Дс</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="h-32 bg-violet-400 rounded-t-lg"></div>
+                    <p class="text-[10px] mt-2 text-slate-500">Сс</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="h-24 bg-violet-300 rounded-t-lg"></div>
+                    <p class="text-[10px] mt-2 text-slate-500">Ср</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="h-40 bg-violet-600 rounded-t-lg"></div>
+                    <p class="text-[10px] mt-2 text-slate-500">Бс</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="h-28 bg-violet-400 rounded-t-lg"></div>
+                    <p class="text-[10px] mt-2 text-slate-500">Жм</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="h-36 bg-violet-500 rounded-t-lg"></div>
+                    <p class="text-[10px] mt-2 text-slate-500">Сб</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="h-16 bg-violet-200 rounded-t-lg"></div>
+                    <p class="text-[10px] mt-2 text-slate-500">Жс</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SMART CHECKLIST -->
+
+        <div class="bg-white rounded-2xl border border-slate-200
+                    shadow-sm p-5">
+
+            <div class="flex items-center gap-2 mb-4">
+
+                <i class="fa-solid fa-list-check text-emerald-600"></i>
+
+                <h3 class="font-bold text-sm">
+                    Smart Checklist
+                </h3>
+
+            </div>
+
+
+            <div class="space-y-2">
+
+                <label class="flex items-center gap-3 p-3
+                              rounded-xl bg-slate-50 cursor-pointer">
+
+                    <input type="checkbox"
+                           onchange="updateChecklist()"
+                           class="w-4 h-4 accent-violet-600">
+
+                    <span class="text-xs">
+                        Бүгінгі басты тапсырманы орындау
+                    </span>
+
+                </label>
+
+
+                <label class="flex items-center gap-3 p-3
+                              rounded-xl bg-slate-50 cursor-pointer">
+
+                    <input type="checkbox"
+                           onchange="updateChecklist()"
+                           class="w-4 h-4 accent-violet-600">
+
+                    <span class="text-xs">
+                        30 минут қайталау жасау
+                    </span>
+
+                </label>
+
+
+                <label class="flex items-center gap-3 p-3
+                              rounded-xl bg-slate-50 cursor-pointer">
+
+                    <input type="checkbox"
+                           onchange="updateChecklist()"
+                           class="w-4 h-4 accent-violet-600">
+
+                    <span class="text-xs">
+                        Ертеңгі сабаққа дайындалу
+                    </span>
+
+                </label>
+
+
+                <label class="flex items-center gap-3 p-3
+                              rounded-xl bg-slate-50 cursor-pointer">
+
+                    <input type="checkbox"
+                           onchange="updateChecklist()"
+                           class="w-4 h-4 accent-violet-600">
+
+                    <span class="text-xs">
+                        Оқу нәтижесін белгілеу
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <div class="mt-4">
+
+                <div class="flex justify-between text-[10px] mb-1">
+
+                    <span>
+                        Күндік мақсат
+                    </span>
+
+                    <span id="checkProgress">
+                        0 / 4
+                    </span>
+
+                </div>
+
+                <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+
+                    <div id="checkBar"
+                         class="h-full bg-emerald-500 rounded-full"
+                         style="width:0%">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="border-t border-slate-200 bg-white py-4 text-center">
+
+    <p class="text-xs text-slate-500">
+
+        AI Study Planner • Smart Educational Technology • 2026
+
+    </p>
+
+</footer>
+
+
+
+<script>
+
+let tasks = [];
+
+
+// ADD TASK
+
+function addTask() {
+
+    const subject =
+        document.getElementById("subject").value;
+
+    const taskName =
+        document.getElementById("task").value.trim();
+
+    const deadline =
+        document.getElementById("deadline").value;
+
+    const hours =
+        Number(document.getElementById("hours").value);
+
+    const priority =
+        document.getElementById("priority").value;
+
+
+    if(!taskName) {
+
+        alert("Тапсырма атауын енгізіңіз!");
+
+        return;
+
+    }
+
+
+    tasks.push({
+
+        subject: subject,
+
+        name: taskName,
+
+        deadline: deadline || "Дедлайн жоқ",
+
+        hours: hours,
+
+        priority: priority,
+
+        completed: false
+
+    });
+
+
+    document.getElementById("task").value = "";
+
+
+    renderTasks();
+
+    updateStats();
+
+}
+
+
+
+// RENDER TASKS
+
+function renderTasks() {
+
+    const list =
+        document.getElementById("taskList");
+
+
+    if(tasks.length === 0) {
+
+        list.innerHTML = `
+
+            <div class="text-center py-10 text-slate-400">
+
+                <i class="fa-solid fa-clipboard-list text-3xl mb-3"></i>
+
+                <p class="text-xs">
+                    Әзірге тапсырмалар жоқ
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const priorityOrder = {
+
+        high: 1,
+
+        medium: 2,
+
+        low: 3
+
+    };
+
+
+    const sorted =
+        [...tasks].sort(
+            (a,b) =>
+            priorityOrder[a.priority] -
+            priorityOrder[b.priority]
+        );
+
+
+    list.innerHTML =
+        sorted.map((task, index) => {
+
+
+            let color = "";
+
+            let badge = "";
+
+
+            if(task.priority === "high") {
+
+                color =
+                    "border-red-200 bg-red-50";
+
+                badge =
+                    "bg-red-100 text-red-700";
+
+            }
+
+
+            if(task.priority === "medium") {
+
+                color =
+                    "border-amber-200 bg-amber-50";
+
+                badge =
+                    "bg-amber-100 text-amber-700";
+
+            }
+
+
+            if(task.priority === "low") {
+
+                color =
+                    "border-emerald-200 bg-emerald-50";
+
+                badge =
+                    "bg-emerald-100 text-emerald-700";
+
+            }
+
+
+            return `
+
+                <div class="border ${color}
+                            rounded-xl p-4">
+
+                    <div class="flex items-start gap-3">
+
+                        <input type="checkbox"
+                               ${task.completed ? "checked" : ""}
+                               onchange="completeTask(${index})"
+                               class="mt-1 w-4 h-4 accent-violet-600">
+
+                        <div class="flex-1">
+
+                            <div class="flex items-center
+                                        justify-between gap-2">
+
+                                <h4 class="font-bold text-sm
+                                           ${task.completed ? "line-through text-slate-400" : ""}">
+
+                                    ${task.name}
+
+                                </h4>
+
+                                <span class="text-[10px]
+                                             px-2 py-1 rounded-full
+                                             font-semibold ${badge}">
+
+                                    ${task.priority === "high"
+                                        ? "HIGH"
+                                        : task.priority === "medium"
+                                        ? "MEDIUM"
+                                        : "LOW"}
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="flex flex-wrap gap-3 mt-2
+                                        text-[10px] text-slate-500">
+
+                                <span>
+                                    <i class="fa-solid fa-book mr-1"></i>
+                                    ${task.subject}
+                                </span>
+
+                                <span>
+                                    <i class="fa-regular fa-clock mr-1"></i>
+                                    ${task.hours} сағ.
+                                </span>
+
+                                <span>
+                                    <i class="fa-regular fa-calendar mr-1"></i>
+                                    ${task.deadline}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <button onclick="deleteTask(${index})"
+                                class="text-slate-400
+                                       hover:text-red-500">
+
+                            <i class="fa-solid fa-trash text-xs"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+
+// COMPLETE TASK
+
+function completeTask(index) {
+
+    tasks[index].completed =
+        !tasks[index].completed;
+
+    renderTasks();
+
+    updateStats();
+
+}
+
+
+
+// DELETE TASK
+
+function deleteTask(index) {
+
+    tasks.splice(index,1);
+
+    renderTasks();
+
+    updateStats();
+
+}
+
+
+
+// STATISTICS
+
+function updateStats() {
+
+    const count =
+        tasks.length;
+
+
+    const total =
+        tasks.reduce(
+            (sum, task) =>
+            sum + task.hours,
+            0
+        );
+
+
+    const completed =
+        tasks.filter(
+            task => task.completed
+        ).length;
+
+
+    const progress =
+        count === 0
+        ? 0
+        : Math.round(
+            completed / count * 100
+        );
+
+
+    document.getElementById("taskCount")
+        .innerText = count;
+
+
+    document.getElementById("totalHours")
+        .innerText = total;
+
+
+    document.getElementById("progressText")
+        .innerText = progress + "%";
+
+
+    document.getElementById("progressBar")
+        .style.width = progress + "%";
+
+}
+
+
+
+// AI PLAN
+
+function generatePlan() {
+
+    const advice =
+        document.getElementById("aiAdvice");
+
+
+    if(tasks.length === 0) {
+
+        advice.innerText =
+            "Алдымен кемінде бір оқу тапсырмасын қосыңыз. AI сол тапсырмалардың көлемі мен приоритетін талдап, оқу ретін ұсынады.";
+
+        return;
+
+    }
+
+
+    const high =
+        tasks.filter(
+            t => t.priority === "high"
+        ).length;
+
+
+    const totalHours =
+        tasks.reduce(
+            (sum,t) =>
+            sum + t.hours,
+            0
+        );
+
+
+    if(high >= 2) {
+
+        advice.innerText =
+            `AI ұсынысы: Сізде ${high} жоғары приоритетті тапсырма бар. ` +
+            `Алдымен дедлайны жақын және маңызды тапсырмаларды орындаңыз. ` +
+            `Жалпы жоспарланған оқу уақыты — ${totalHours} сағат. ` +
+            `Әр 45–50 минут сайын қысқа үзіліс жасаған тиімді.`;
+
+    }
+
+    else {
+
+        advice.innerText =
+            `AI ұсынысы: Оқу жүктемеңіз салыстырмалы түрде басқарылатын деңгейде. ` +
+            `Барлық тапсырмаларға шамамен ${totalHours} сағат қажет. ` +
+            `Күн сайын аз мөлшерде орындап отыру соңғы күндегі жүктемені азайтады.`;
+
+    }
+
+}
+
+
+
+// GPA
+
+function calculateGPA() {
+
+    const current =
+        Number(
+            document.getElementById("currentGpa").value
+        );
+
+
+    const target =
+        Number(
+            document.getElementById("targetGpa").value
+        );
+
+
+    const result =
+        document.getElementById("gpaResult");
+
+
+    if(current >= target) {
+
+        result.innerHTML =
+            "✓ Қазіргі GPA мақсатты көрсеткіштен жоғары немесе тең.";
+
+        result.className =
+            "mt-4 text-center text-sm text-emerald-400";
+
+        return;
+
+    }
+
+
+    const difference =
+        target - current;
+
+
+    result.innerHTML =
+        `Мақсатқа дейінгі айырмашылық: <b>${difference.toFixed(2)}</b><br>
+         Жоғары нәтижелі бағаларға көбірек назар аударыңыз.`;
+
+    result.className =
+        "mt-4 text-center text-sm text-violet-300";
+
+}
+
+
+
+// CHECKLIST
+
+function updateChecklist() {
+
+    const checks =
+        document.querySelectorAll(
+            '.space-y-2 input[type="checkbox"]'
+        );
+
+
+    let completed = 0;
+
+
+    checks.forEach(
+        check => {
+
+            if(check.checked) {
+                completed++;
+            }
+
+        }
+    );
+
+
+    const total =
+        checks.length;
+
+
+    const percent =
+        total === 0
+        ? 0
+        : completed / total * 100;
+
+
+    document.getElementById("checkProgress")
+        .innerText =
+        `${completed} / ${total}`;
+
+
+    document.getElementById("checkBar")
+        .style.width =
+        percent + "%";
+
+}
+
+
+
+// START
+
+window.onload = function() {
+
+    updateStats();
+
+};
+
+</script>
+
+</body>
+</html>
